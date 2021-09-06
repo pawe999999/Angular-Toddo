@@ -1,0 +1,7 @@
+<app-control-panel></app-control-panel>
+<app-todo-item
+    *ngFor="let element of elements; let i = index"
+    [element]="element"
+    [id]="i"
+></app-todo-item>
+<app-modal></app-modal>

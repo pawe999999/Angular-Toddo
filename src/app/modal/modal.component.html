@@ -1,0 +1,18 @@
+<div class="modal" [style.display]="isModalOpen ? 'block' : 'none'">
+    <div class="innerModal">
+        <form [formGroup]="modalForm" (ngSubmit)="editTodoItem()">
+            <input type="text" formControlName="title" />
+            <input type="date" formControlName="startDate" />
+            <input type="time" formControlName="startTime" />
+            <input type="date" formControlName="endDate" />
+            <input type="time" formControlName="endTime" />
+
+            <button class="btn btn-success" type="submit" id="save-button">
+                Save
+            </button>
+            <button class="btn btn-danger" type="button" (click)="closeModal()">
+                Close
+            </button>
+        </form>
+    </div>
+</div>
