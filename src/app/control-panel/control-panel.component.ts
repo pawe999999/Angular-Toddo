@@ -50,8 +50,7 @@ export class ControlPanelComponent implements OnInit {
     invalidTitleName(control: AbstractControl): any {
         const letters = /^[A-Za-z]+$/;
         if (control.value.match(letters)) {
-            /*             console.log(control.value.match(letters));
-             */ return null;
+            return null;
         }
         return { invalidProjectName: true };
     }
