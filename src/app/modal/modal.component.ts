@@ -38,6 +38,7 @@ export class ModalComponent implements OnInit {
     }
 
     editTodoItem() {
+        console.log(this.id);
         this.todoService.elements[this.id] = {
             title: this.modalForm.value.title,
             start: new Date(
@@ -52,6 +53,7 @@ export class ModalComponent implements OnInit {
             ).toLocaleString(),
             timeStamp: Date.now(),
         };
+        this.todoService.itemAdded.next(this.todoService.elements.slice());
         this.modalForm.reset();
         this.closeModal();
     }

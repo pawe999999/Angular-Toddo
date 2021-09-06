@@ -14,8 +14,12 @@ export class AppComponent implements OnInit {
         end: string;
         timeStamp: number;
     }[];
+    isChange: any;
     constructor(private todoService: TodoService) {}
     ngOnInit() {
         this.elements = this.todoService.getElements();
+        this.isChange = this.todoService.itemAdded.subscribe((elements) => {
+            this.elements = elements;
+        });
     }
 }
