@@ -1,32 +1,44 @@
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 export class TodoService {
-    modalOpen = new Subject<any>();
-    itemAdded = new Subject<any>();
-    //test elements
-    elements = [
-        { title: 'test', start: '1', end: '2', timeStamp: 1 },
-        { title: 'test', start: '1', end: '2', timeStamp: 1 },
-    ];
+    private todoItemsStream = new BehaviorSubject<TodoItem[]>([
+        { title: 'test', start: '1', end: '2', timeStamp: 1, isDone: false },
+        { title: 'test', start: '1', end: '2', timeStamp: 1, isDone: false },
+    ]);
 
-    addTodoItem(data: {
-        title: string;
-        start: string;
-        end: string;
-        timeStamp: number;
-    }) {
-        this.elements.push(data);
-        this.itemAdded.next(this.elements.slice());
+    get todoItems$(): Observable<TodoItem[]> {
+        return this.todoItemsStream.asObservable();
     }
-    deleteTodoItem(id: number) {
-        this.elements.splice(id, 1);
-        this.itemAdded.next(this.elements.slice());
+
+    get todoItems(): TodoItem[] {
+        return this.todoItemsStream.getValue();
     }
-    openModal(id: any) {
-        console.log(id);
-        this.modalOpen.next(id);
+
+    addTodoItem(data: TodoItem): void {
+        this.todoItemsStream.next([...this.todoItems, data]);
     }
-    getElements() {
-        return this.elements.slice();
+
+    deleteTodoItem(index: number): void {
+        this.todoItemsStream.next(
+            this.todoItems.filter((_: TodoItem, i: number) => index !== i)
+        );
     }
+    changeItemStatus(id: number): void {
+        this.todoItems[id].isDone = !this.todoItems[id].isDone;
+        this.todoItemsStream.next([...this.todoItems]);
+    }
+    filterDoneItems(): void {
+        this.todoItemsStream.next(this.todoItems);
+    }
+    showAll() {
+        this.todoItemsStream.next([...this.todoItems]);
+    }
+}
+
+export interface TodoItem {
+    title: string;
+    start: string;
+    end: string;
+    timeStamp: number;
+    isDone: boolean;
 }

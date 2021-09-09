@@ -8,6 +8,11 @@ import { ControlPanelComponent } from './control-panel/control-panel.component';
 import { TodoService } from './todo.service';
 import { ModalComponent } from './modal/modal.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import {
+    NgbModal,
+    NgbModalModule,
+    NgbModule,
+} from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
     declarations: [
@@ -16,7 +21,13 @@ import { ReactiveFormsModule } from '@angular/forms';
         ControlPanelComponent,
         ModalComponent,
     ],
-    imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        ReactiveFormsModule,
+        NgbModule,
+        NgbModalModule,
+    ],
     providers: [TodoService],
     bootstrap: [AppComponent],
 })

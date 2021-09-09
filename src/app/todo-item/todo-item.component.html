@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card" [ngClass]="itemIsDone ? 'done' : ''">
     <div class="card-header">
         <h2>{{ element.title }}</h2>
     </div>
@@ -9,7 +9,13 @@
         <p class="card-text">
             {{ element.end }}
         </p>
-        <a href="#" class="btn btn-danger" (click)="deleteItem(id)">Delete</a>
-        <a href="#" class="btn btn-primary" (click)="editItem(id)">Edit</a>
+        <a class="btn btn-danger" (click)="deleteItem(id)">Delete</a>
+        <a class="btn btn-primary" (click)="editItem(id)">Edit</a>
+
+        <div class="btn-group btn-group-toggle float-end">
+            <button class="btn-primary" (click)="setAsDone()">
+                Set as {{ itemIsDone ? 'undone' : 'done' }}
+            </button>
+        </div>
     </div>
 </div>

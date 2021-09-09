@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import {
     AbstractControl,
     FormControl,
     FormGroup,
     Validators,
 } from '@angular/forms';
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
 import { Subscription } from 'rxjs';
 import { TodoService } from '../todo.service';
 
@@ -14,32 +16,29 @@ import { TodoService } from '../todo.service';
     styleUrls: ['./modal.component.css'],
 })
 export class ModalComponent implements OnInit {
+    @Input() id!: number;
     modalForm!: FormGroup;
-    private modalSub!: Subscription;
-    isModalOpen: any;
-    id!: number;
-    constructor(private todoService: TodoService) {}
+    modalRef!: any;
+
+    constructor(
+        private todoService: TodoService,
+        private modalService: NgbModal
+    ) {}
 
     ngOnInit() {
         this.modalForm = new FormGroup({
             title: new FormControl(null, [
                 Validators.required,
-                /*   this.invalidTitleName, */
+                Validators.pattern('[a-zA-Z ]*'),
             ]),
             startDate: new FormControl(null, Validators.required),
             startTime: new FormControl(null, Validators.required),
             endDate: new FormControl(null, Validators.required),
             endTime: new FormControl(null, Validators.required),
         });
-        this.modalSub = this.todoService.modalOpen.subscribe((id) => {
-            this.id = id;
-            this.isModalOpen = !this.isModalOpen;
-        });
     }
-
-    editTodoItem() {
-        console.log(this.id);
-        this.todoService.elements[this.id] = {
+    editTodoItem(): void {
+        this.todoService.todoItems[this.id] = {
             title: this.modalForm.value.title,
             start: new Date(
                 Date.parse(
@@ -52,22 +51,12 @@ export class ModalComponent implements OnInit {
                 )
             ).toLocaleString(),
             timeStamp: Date.now(),
+            isDone: false,
         };
-        this.todoService.itemAdded.next(this.todoService.elements.slice());
         this.modalForm.reset();
         this.closeModal();
     }
-
-    closeModal() {
-        this.modalForm.reset();
-        this.isModalOpen = !this.isModalOpen;
-    }
-    invalidTitleName(control: AbstractControl): any {
-        const letters = /^[A-Za-z]+$/;
-        console.log(control.value);
-        if (control.value.match(letters)) {
-            return null;
-        }
-        return { invalidProjectName: true };
+    closeModal(): void {
+        this.modalService.dismissAll();
     }
 }

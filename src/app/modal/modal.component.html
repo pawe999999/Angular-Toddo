@@ -1,4 +1,4 @@
-<div class="modal" [style.display]="isModalOpen ? 'block' : 'none'">
+<!-- <div class="modal-body">
     <div class="innerModal">
         <form [formGroup]="modalForm" (ngSubmit)="editTodoItem()">
             <input type="text" formControlName="title" />
@@ -10,9 +10,40 @@
             <button class="btn btn-success" type="submit" id="save-button">
                 Save
             </button>
-            <button class="btn btn-danger" type="button" (click)="closeModal()">
-                Close
-            </button>
+            <button class="btn btn-danger" type="button">Close</button>
         </form>
     </div>
+</div> -->
+
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Profile update</h4>
+    <button
+        type="button"
+        class="close"
+        aria-label="Close"
+        (click)="closeModal()"
+    >
+        <span aria-hidden="true">&times;</span>
+    </button>
 </div>
+<div class="modal-body">
+    <form [formGroup]="modalForm" (ngSubmit)="editTodoItem()">
+        <div class="form-group">
+            <input class="form-control" type="text" formControlName="title" />
+            <input
+                class="form-control"
+                type="date"
+                formControlName="startDate"
+            />
+            <input
+                class="form-control"
+                type="time"
+                formControlName="startTime"
+            />
+            <input class="form-control" type="date" formControlName="endDate" />
+            <input class="form-control" type="time" formControlName="endTime" />
+        </div>
+        <button type="submit" class="btn btn-outline-dark">Save</button>
+    </form>
+</div>
+<div class="modal-footer"></div>

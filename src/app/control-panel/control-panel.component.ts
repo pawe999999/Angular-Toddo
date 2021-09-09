@@ -1,11 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import {
-    AbstractControl,
-    FormControl,
-    FormGroup,
-    Validators,
-} from '@angular/forms';
-import { TodoService } from '../todo.service';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { TodoItem, TodoService } from '../todo.service';
 
 @Component({
     selector: 'app-control-panel',
@@ -13,8 +8,9 @@ import { TodoService } from '../todo.service';
     styleUrls: ['./control-panel.component.css'],
 })
 export class ControlPanelComponent implements OnInit {
+    @Output() hiddeItems: EventEmitter<any> = new EventEmitter();
     todoItemForm!: FormGroup;
-    data: any;
+    data!: TodoItem;
     timeStamp!: number;
     start!: string;
     end!: string;
@@ -25,12 +21,12 @@ export class ControlPanelComponent implements OnInit {
         this.todoItemForm = new FormGroup({
             title: new FormControl('', [
                 Validators.required,
-                this.invalidTitleName,
+                Validators.pattern('[a-zA-Z ]*'),
             ]),
         });
     }
 
-    addItem() {
+    addItem(): void {
         if (!this.todoItemForm.valid) {
             throw new Error('Error');
         }
@@ -43,15 +39,15 @@ export class ControlPanelComponent implements OnInit {
             start: this.start,
             end: this.end,
             timeStamp: this.timeStamp,
+            isDone: false,
         };
         this.todoService.addTodoItem(this.data);
     }
 
-    invalidTitleName(control: AbstractControl): any {
-        const letters = /^[A-Za-z]+$/;
-        if (control.value.match(letters)) {
-            return null;
-        }
-        return { invalidProjectName: true };
+    onFilterDoneItems() {
+        this.hiddeItems.emit(this.todoService.todoItems);
+    }
+    onShowAll() {
+        this.todoService.showAll();
     }
 }
