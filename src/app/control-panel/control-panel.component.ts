@@ -1,6 +1,8 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { TodoItem, TodoService } from '../todo.service';
+import { fromEvent } from 'rxjs';
+import { concatMap, filter, map, toArray } from 'rxjs/operators';
+import { FilterOptions, TodoItem, TodoService } from '../todo.service';
 
 @Component({
     selector: 'app-control-panel',
@@ -8,7 +10,6 @@ import { TodoItem, TodoService } from '../todo.service';
     styleUrls: ['./control-panel.component.css'],
 })
 export class ControlPanelComponent implements OnInit {
-    @Output() hiddeItems: EventEmitter<any> = new EventEmitter();
     todoItemForm!: FormGroup;
     data!: TodoItem;
     timeStamp!: number;
@@ -40,14 +41,33 @@ export class ControlPanelComponent implements OnInit {
             end: this.end,
             timeStamp: this.timeStamp,
             isDone: false,
+            id: Math.floor(Math.random() * (100000 - 0 + 1) + 0),
         };
         this.todoService.addTodoItem(this.data);
     }
 
-    onFilterDoneItems() {
-        this.hiddeItems.emit(this.todoService.todoItems);
+    onFilterDoneItems(): void {
+        this.todoService.updateFilters({ filterType: FilterOptions.HIDE_DONE });
     }
-    onShowAll() {
-        this.todoService.showAll();
+    onShowAll(): void {
+        this.todoService.updateFilters({ filterType: FilterOptions.ALL });
+    }
+    onFilterTitle(title: string): void {
+        this.todoService.updateFilters({
+            filterType: FilterOptions.TITLE,
+            filterValue: title,
+        });
+    }
+    onSortItems(): void {
+        this.todoService.todoItems.sort((a, b) => {
+            if (a.title < b.title) {
+                return -1;
+            }
+            if (a.title > b.title) {
+                return 1;
+            }
+            return 0;
+        });
+        this.todoService.render();
     }
 }

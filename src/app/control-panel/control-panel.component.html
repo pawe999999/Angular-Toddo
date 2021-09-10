@@ -41,6 +41,20 @@
                             >
                                 Show all
                             </button>
+                            <button
+                                type="button"
+                                class="btn btn-primary"
+                                (click)="onSortItems()"
+                            >
+                                Sort by title
+                            </button>
+                            <label>
+                                Filter by title
+                                <input
+                                    #inputTitle
+                                    (change)="onFilterTitle(inputTitle.value)"
+                                />
+                            </label>
                         </div>
                     </form>
                 </div>

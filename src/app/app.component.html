@@ -1,6 +1,8 @@
 <app-control-panel></app-control-panel>
+<h3 *ngIf="elements.length === 0">No items found</h3>
 <app-todo-item
-    *ngFor="let element of elements$ | async; let i = index"
+    *ngFor="let element of elements"
     [element]="element"
-    [id]="i"
+    [id]="element.id"
+    [itemIsDone]="element.isDone"
 ></app-todo-item>

@@ -1,14 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
-import {
-    AbstractControl,
-    FormControl,
-    FormGroup,
-    Validators,
-} from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-
-import { Subscription } from 'rxjs';
-import { TodoService } from '../todo.service';
+import { map, switchMap } from 'rxjs/operators';
+import {
+    FilterOptions,
+    FilterSettings,
+    TodoItem,
+    TodoService,
+} from '../todo.service';
 
 @Component({
     selector: 'app-modal',
@@ -38,21 +37,7 @@ export class ModalComponent implements OnInit {
         });
     }
     editTodoItem(): void {
-        this.todoService.todoItems[this.id] = {
-            title: this.modalForm.value.title,
-            start: new Date(
-                Date.parse(
-                    `${this.modalForm.value.startDate} ${this.modalForm.value.startTime}`
-                )
-            ).toLocaleString(),
-            end: new Date(
-                Date.parse(
-                    `${this.modalForm.value.endDate} ${this.modalForm.value.endTime}`
-                )
-            ).toLocaleString(),
-            timeStamp: Date.now(),
-            isDone: false,
-        };
+        this.todoService.editItem(this.modalForm, this.id);
         this.modalForm.reset();
         this.closeModal();
     }

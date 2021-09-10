@@ -7,12 +7,9 @@ import { TodoItemComponent } from './todo-item/todo-item.component';
 import { ControlPanelComponent } from './control-panel/control-panel.component';
 import { TodoService } from './todo.service';
 import { ModalComponent } from './modal/modal.component';
-import { ReactiveFormsModule } from '@angular/forms';
-import {
-    NgbModal,
-    NgbModalModule,
-    NgbModule,
-} from '@ng-bootstrap/ng-bootstrap';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgbModalModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { FilterPipe } from './pipe.filter';
 
 @NgModule({
     declarations: [
@@ -20,6 +17,7 @@ import {
         TodoItemComponent,
         ControlPanelComponent,
         ModalComponent,
+        FilterPipe,
     ],
     imports: [
         BrowserModule,
@@ -27,6 +25,7 @@ import {
         ReactiveFormsModule,
         NgbModule,
         NgbModalModule,
+        FormsModule,
     ],
     providers: [TodoService],
     bootstrap: [AppComponent],
